@@ -23,7 +23,8 @@
     "jwks-rsa": "^3.2.2",
     "mongoose": "^9.1.5",
     "multer": "^2.0.2",
-    "nodemailer": "^6.9.16"
+    "nodemailer": "^6.9.16",
+    "stripe": "^20.4.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.11"
