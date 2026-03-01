@@ -34,6 +34,7 @@ const bookingSchema = new mongoose.Schema({
     enum: ["Vegetarian", "Vegan", "Seafood", "Meat", "Gluten-Free", "Other"],
     default: [],
   },
+  notification24hSent: { type: Boolean, default: false },
   createdAt: { type: Date, default: Date.now },
 });
 

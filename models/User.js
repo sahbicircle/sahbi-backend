@@ -41,6 +41,7 @@ const userSchema = new mongoose.Schema({
   trustScore: { type: Number, default: 5 },
   facialDataId: String,
   faceVerified: Boolean,
+  faceVerificationImage: { type: String, default: null },
   likedProfiles: {
     type: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     default: [],
@@ -48,6 +49,7 @@ const userSchema = new mongoose.Schema({
   resetPasswordCode: String,
   resetPasswordExpires: Date,
   role: { type: String, enum: ["user", "admin"], default: "user" },
+  expoPushToken: { type: String, default: null },
   createdAt: { type: Date, default: Date.now },
 });
 

@@ -13,6 +13,8 @@ const subscriptionRoutes = require("./routes/subscriptions");
 const trustRoutes = require("./routes/trust");
 const facialRoutes = require("./routes/facial");
 const adminRoutes = require("./routes/admin");
+const notificationRoutes = require("./routes/notifications");
+const paymentRoutes = require("./routes/payments");
 
 const app = express();
 
@@ -34,6 +36,8 @@ app.use("/api/subscriptions", subscriptionRoutes);
 app.use("/api/trust", trustRoutes);
 app.use("/api/facial", facialRoutes);
 app.use("/api/admin", adminRoutes);
+app.use("/api/notifications", notificationRoutes);
+app.use("/api/payments", paymentRoutes);
 
 // MongoDB Connection
 mongoose
@@ -43,4 +47,11 @@ mongoose
 
 // Start server
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+
+  // Run 24h-before-event notification job every hour
+  const { run24hNotificationJob } = require("./jobs/notification24h");
+  run24hNotificationJob();
+  setInterval(run24hNotificationJob, 60 * 60 * 1000);
+});

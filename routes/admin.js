@@ -17,6 +17,7 @@ const {
   getAllChats,
   getChatById,
   deleteChat,
+  createGlobalNotification,
 } = require("../controllers/adminController");
 
 // Users
@@ -41,5 +42,8 @@ router.delete("/bookings/:id", adminMiddleware, deleteBooking);
 router.get("/chats", adminMiddleware, getAllChats);
 router.get("/chats/:id", adminMiddleware, getChatById);
 router.delete("/chats/:id", adminMiddleware, deleteChat);
+
+// Notifications (global)
+router.post("/notifications", adminMiddleware, createGlobalNotification);
 
 module.exports = router;

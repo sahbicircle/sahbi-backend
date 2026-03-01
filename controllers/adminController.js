@@ -2,6 +2,8 @@ const User = require("../models/User");
 const Event = require("../models/Event");
 const Booking = require("../models/Booking");
 const Chat = require("../models/Chat");
+const Notification = require("../models/Notification");
+const pushService = require("../services/pushService");
 
 // --- Users ---
 exports.getAllUsers = async (req, res) => {
@@ -197,6 +199,30 @@ exports.deleteChat = async (req, res) => {
     const chat = await Chat.findByIdAndDelete(req.params.id);
     if (!chat) return res.status(404).json({ message: "Chat not found" });
     res.json({ message: "Chat deleted" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+// --- Notifications ---
+exports.createGlobalNotification = async (req, res) => {
+  try {
+    const { title, body } = req.body;
+    if (!title || !title.trim()) {
+      return res.status(400).json({ message: "Title is required" });
+    }
+    const notification = await Notification.create({
+      type: "global",
+      title: title.trim(),
+      body: (body || "").trim(),
+    });
+    await pushService.sendPushToAll(
+      notification.title,
+      notification.body,
+      { notificationId: notification._id.toString() }
+    );
+    res.status(201).json(notification);
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Server error" });

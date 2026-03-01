@@ -11,6 +11,7 @@ exports.verifyFace = async (req, res) => {
   await User.findByIdAndUpdate(req.user.id, {
     faceVerified: true,
     facialDataId: result.facialDataId,
+    faceVerificationImage: photoUrl || undefined,
   });
   res.json({ success: true, facialDataId: result.facialDataId });
 };

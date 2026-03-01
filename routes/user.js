@@ -3,6 +3,7 @@ const router = express.Router();
 const User = require("../models/User");
 const authMiddleware = require("../middleware/authMiddleware");
 const chatService = require("../services/chatService");
+const notificationController = require("../controllers/notificationController");
 
 // Get user basic info (firstName, lastName) - must be before /:id to avoid conflict
 router.get("/:id/basic", authMiddleware, async (req, res) => {
@@ -56,6 +57,31 @@ router.put("/:id/like", authMiddleware, async (req, res) => {
 
     if (mutualLike) {
       chat = await chatService.getOrCreatePrivateChat(userId, targetUserId);
+    }
+
+    // Notify target user when someone likes them
+    if (!alreadyLiked) {
+      const likerName = `${user.firstName || ""} ${user.lastName || ""}`.trim() || "Someone";
+      if (mutualLike) {
+        await notificationController.createUserNotification(
+          targetUserId,
+          "It's a match! 💕",
+          `${likerName} liked you back! Start a conversation.`,
+          { chatId: chat?._id?.toString() },
+        );
+        await notificationController.createUserNotification(
+          userId,
+          "It's a match! 💕",
+          `${targetUser.firstName || ""} ${targetUser.lastName || ""}`.trim() + " liked you back! Start a conversation.",
+          { chatId: chat?._id?.toString() },
+        );
+      } else {
+        await notificationController.createUserNotification(
+          targetUserId,
+          "Someone liked you!",
+          `${likerName} liked you after the event. Like them back to start chatting!`,
+        );
+      }
     }
 
     res.json({
