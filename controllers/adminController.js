@@ -3,7 +3,6 @@ const Event = require("../models/Event");
 const Booking = require("../models/Booking");
 const Chat = require("../models/Chat");
 const Notification = require("../models/Notification");
-const WaitlistEntry = require("../models/WaitlistEntry");
 const pushService = require("../services/pushService");
 
 // --- Users ---
@@ -224,17 +223,6 @@ exports.createGlobalNotification = async (req, res) => {
       { notificationId: notification._id.toString() }
     );
     res.status(201).json(notification);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Server error" });
-  }
-};
-
-// --- Waitlist ---
-exports.getAllWaitlistEntries = async (req, res) => {
-  try {
-    const entries = await WaitlistEntry.find().sort({ createdAt: -1 }).lean();
-    res.json(entries);
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Server error" });

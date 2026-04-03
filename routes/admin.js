@@ -18,8 +18,14 @@ const {
   getChatById,
   deleteChat,
   createGlobalNotification,
-  getAllWaitlistEntries,
 } = require("../controllers/adminController");
+const {
+  createWaitingListEntry,
+  listWaitingList,
+  getWaitingListById,
+  updateWaitingListEntry,
+  deleteWaitingListEntry,
+} = require("../controllers/waitingListController");
 
 // Users
 router.get("/users", adminMiddleware, getAllUsers);
@@ -46,6 +52,12 @@ router.delete("/chats/:id", adminMiddleware, deleteChat);
 
 // Notifications (global)
 router.post("/notifications", adminMiddleware, createGlobalNotification);
-router.get("/waitlist", adminMiddleware, getAllWaitlistEntries);
+
+// waitingList collection — full CRUD (admin JWT)
+router.post("/waiting-list", adminMiddleware, createWaitingListEntry);
+router.get("/waiting-list", adminMiddleware, listWaitingList);
+router.get("/waiting-list/:id", adminMiddleware, getWaitingListById);
+router.put("/waiting-list/:id", adminMiddleware, updateWaitingListEntry);
+router.delete("/waiting-list/:id", adminMiddleware, deleteWaitingListEntry);
 
 module.exports = router;

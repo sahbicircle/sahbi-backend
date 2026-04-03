@@ -15,7 +15,6 @@ const facialRoutes = require("./routes/facial");
 const adminRoutes = require("./routes/admin");
 const notificationRoutes = require("./routes/notifications");
 const paymentRoutes = require("./routes/payments");
-const waitlistRoutes = require("./routes/waitlist");
 const waitingListRoutes = require("./routes/waitingList");
 
 const app = express();
@@ -40,7 +39,6 @@ app.use("/api/facial", facialRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/notifications", notificationRoutes);
 app.use("/api/payments", paymentRoutes);
-app.use("/api/waitlist", waitlistRoutes);
 app.use("/api/waiting-list", waitingListRoutes);
 
 // MongoDB Connection
