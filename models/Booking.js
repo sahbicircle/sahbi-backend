@@ -10,6 +10,12 @@ const bookingSchema = new mongoose.Schema({
   },
   checkedIn: { type: Boolean, default: false },
   paymentStatus: { type: String, enum: ["unpaid", "paid"], default: "unpaid" },
+  ticketType: {
+    type: String,
+    enum: ["normal", "premium"],
+    default: "normal",
+  },
+  withPlusOne: { type: Boolean, default: false },
   languages: {
     type: [String],
     enum: [
@@ -26,12 +32,27 @@ const bookingSchema = new mongoose.Schema({
   },
   budget: {
     type: String,
-    enum: ["under 200", "200-400", "above 400+"],
-    default: "under 200",
+    enum: [
+      "under 200",
+      "200-400",
+      "above 400+",
+      "Under 200 DH",
+      "200-400 DH",
+      "+ 400 DH",
+    ],
+    default: null,
   },
   dinnerOptions: {
     type: [String],
-    enum: ["Vegetarian", "Vegan", "Seafood", "Meat", "Gluten-Free", "Other"],
+    enum: [
+      "Vegetarian",
+      "Vegan",
+      "Seafood",
+      "Meat",
+      "Gluten-Free",
+      "Other",
+      "I Eat Everything",
+    ],
     default: [],
   },
   notification24hSent: { type: Boolean, default: false },

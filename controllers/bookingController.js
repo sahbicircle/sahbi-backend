@@ -17,18 +17,38 @@ exports.getBookings = async (req, res) => {
   }
 };
 
+const VALID_BUDGETS = [
+  "Under 200 DH",
+  "200-400 DH",
+  "+ 400 DH",
+  "under 200",
+  "200-400",
+  "above 400+",
+];
+
 exports.createBooking = async (req, res) => {
-  const { eventId, paymentIntentId } = req.body;
+  const { eventId, paymentIntentId, withPlusOne, language, budget, dinner } =
+    req.body;
   try {
     let paymentStatus = "unpaid";
     if (paymentIntentId) {
       const paid = await paymentService.verifyPaymentIntent(paymentIntentId);
       if (paid) paymentStatus = "paid";
     }
+    const ticketType = withPlusOne ? "premium" : "normal";
+    const languages = language ? [language] : [];
+    const budgetVal =
+      budget && VALID_BUDGETS.includes(budget) ? budget : null;
+    const dinnerOptions = Array.isArray(dinner) ? dinner : dinner ? [dinner] : [];
     const booking = new Booking({
       user: req.user.id,
       event: eventId,
       paymentStatus,
+      ticketType,
+      withPlusOne: Boolean(withPlusOne),
+      ...(languages.length && { languages }),
+      ...(budgetVal && { budget: budgetVal }),
+      ...(dinnerOptions.length && { dinnerOptions }),
     });
     await booking.save();
 
@@ -133,7 +153,7 @@ exports.getUserBookings = async (req, res) => {
 
     // Find bookings for this user and populate event details
     const bookings = await Booking.find({ user: userId })
-      .populate("event", "title date location price") // include event info
+      .populate("event", "title date location price premiumPrice") // include event info
       .sort({ createdAt: -1 }); // most recent first
 
     res.status(200).json({ bookings });

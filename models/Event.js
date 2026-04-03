@@ -7,6 +7,7 @@ const eventSchema = new mongoose.Schema({
   location: String,
   date: { type: Date, required: true },
   price: Number,
+  premiumPrice: Number, // price for premium ticket (with +1)
   image: String,
   maxParticipants: Number,
   createdAt: { type: Date, default: Date.now },

@@ -2,11 +2,12 @@ const paymentService = require("../services/paymentService");
 
 exports.createTicketIntent = async (req, res) => {
   try {
-    const { eventId } = req.body;
+    const { eventId, withPlusOne } = req.body;
     if (!eventId) return res.status(400).json({ message: "eventId required" });
     const result = await paymentService.createTicketPaymentIntent(
       req.user.id,
-      eventId
+      eventId,
+      { withPlusOne: Boolean(withPlusOne) }
     );
     res.json(result);
   } catch (err) {

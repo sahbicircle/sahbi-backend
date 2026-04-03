@@ -18,6 +18,7 @@ const {
   getChatById,
   deleteChat,
   createGlobalNotification,
+  getAllWaitlistEntries,
 } = require("../controllers/adminController");
 
 // Users
@@ -45,5 +46,6 @@ router.delete("/chats/:id", adminMiddleware, deleteChat);
 
 // Notifications (global)
 router.post("/notifications", adminMiddleware, createGlobalNotification);
+router.get("/waitlist", adminMiddleware, getAllWaitlistEntries);
 
 module.exports = router;
